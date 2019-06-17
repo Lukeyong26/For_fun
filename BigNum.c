@@ -42,11 +42,12 @@ void addBigNums (BigNum bnA, BigNum bnB, BigNum *res)
 		int A = bnA.bytes[i] - '0';
 		int B = bnB.bytes[i] - '0';
 		int value =  A + B;
-		if (value > 10) {
-			res->bytes[i+1] = '1';
+		if (value >= 10) {
+			res->bytes[i+1]++;
 		}
 		res->bytes[i] += value%10;
 	}
+	
 }
 
 // Set the value of a BigNum from a string of digits
@@ -57,6 +58,7 @@ int scanBigNum (char *s, BigNum *bn)
 
 	int numStart = 0;
 	for (int i=0; i != '\0'; i++) {
+		if (isdigit(s[0])) break;
 		if (isspace(s[i])) continue;
 		if (!isdigit(s[i])) {
 			numStart = i;
@@ -79,7 +81,7 @@ int scanBigNum (char *s, BigNum *bn)
 	}
 	
 	for (int j=numStart; j <= numSize; j++) {
-		bn->bytes[numActual] = s[j]-'0';
+		bn->bytes[numActual-1] = s[j];
 		numActual--;
 	}
 	return 1;
@@ -96,7 +98,7 @@ void showBigNum (BigNum bn)
 		}
 	}
 
-	for (int j=start; j >=0; j--) {
+	for (int j=start; j >= 0; j--) {
 		printf("%c",bn.bytes[j]);
 	}
 }
